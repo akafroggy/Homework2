@@ -6,6 +6,8 @@
 
 1.Max/Min Heap
 
+要定義一個介面（MinPQ），規定 min priority queue 要有哪些基本操作，再寫一個類別（MinHeap）真正用 heap 結構實現這些操作
+
 2.二元搜尋樹:
 
 (a)從空的二元搜尋樹（BST）開始，插入 n 個隨機值
@@ -15,6 +17,7 @@
 
 1.Max/Min Heap:
 
+設計一個 MinPQ 抽象類別，定義四個純虛擬函式：IsEmpty(), Top(), Push(), Pop()，用陣列（或 vector）實作 MinHeap，繼承 MinPQ，並完成所有函式。
 
 2.二元搜尋樹:
 
