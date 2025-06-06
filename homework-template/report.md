@@ -1,7 +1,7 @@
  41243252
 # 41243249 
 
-##1.Max/Min Heap
+## 1.Max/Min Heap
 
 ## 解題說明
 
@@ -114,7 +114,7 @@ Priority Queue, MinPQ）的抽象類別，並以二元堆積（MinHeap）方式�
 2.透過實驗測試，無論資料插入順序如何，從 MinHeap 依序取出的元素皆為遞增排序，證明 min-heap 性質正確維護。對空 heap 執行 Top() 或 Pop() 操作時，程式會丟出例外，提升了系統的健壯性
 
 ---
-##第二題binarysearchtree
+## 第二題binarysearchtree
 
 ## 解題說明
 
