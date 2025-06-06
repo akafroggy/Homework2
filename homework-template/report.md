@@ -1,11 +1,9 @@
  41243252
 # 41243249 
 
-1.Max/Min Heap
+##1.Max/Min Heap
 
 ## 解題說明
-
-
 
 要C++ 抽象類別設計、繼承與 heap 的基本操作，並且讓介面和複雜度都和 max priority queue 一致
 
@@ -110,15 +108,23 @@ int main() {
 
 ##申論及開發報告
 1.資料結構的抽象設計與物件導向實作是提升程式可維護性與可重用性的關鍵，優先佇列（Priority Queue）是一種常見的抽象資料型態，廣泛應用於排序、排程、圖論演算法等場景。本題要求以 C++ 撰寫一個最小優先佇列（Min Priority Queue, MinPQ）的抽象類別，並以二元堆積（MinHeap）方式實作，這不僅能鞏固資料結構理論，也能實踐物件導向程式設計中的繼承與多型。
-
 2.本實作的效能與 STL 的 std::priority_queue 使用自定義比較子實現 min-heap 時相當，能有效管理大量資料的即時排序與動態最小值查詢。此結構可廣泛應用於任務排程、事件驅動系統、圖論最短路徑等多種場景
+---
+##第二題binarysearchtree
 
-(a)從空的二元搜尋樹（BST）開始，插入 n 個隨機值
+## 解題說明
 
+(a)從從一棵空的二元搜尋樹（Binary Search Tree, BST）開始，隨機插入n個節點。每個n需進行多次實驗，並計算最終樹的高度。
+隨機插入：利用亂數產生器產生 n 個不同的值，並依序插入 BST，確保插入順序隨機
+計算樹高：插入完畢後，計算 BST 的高度
+計算比值：將高度除以 log2n
 (b)從 BST 中刪除 key 為 k 的節點
 ### 解題策略
+資料結構選擇：使用指標實作 BST，每個節點包含值、左子樹、右子樹指標。
+隨機性：產生 0~n−1的隨機排列，保證插入順序隨機
+高度計算：用遞迴方式計算 BST 高度。
+多組測試：用 for 迴圈依序測試不同 n。
 
-設計一個 MinPQ 抽象類別，定義四個純虛擬函式：IsEmpty(), Top(), Push(), Pop()，用陣列（或 vector）實作 MinHeap，繼承 MinPQ，並完成所有函式。
 
 2.二元搜尋樹:
 
@@ -127,4 +133,67 @@ int main() {
 (b)從根節點開始，根據 BST 性質（小於往左，大於往右）遞迴搜尋 key 為 k 的節點
 3. 主程式呼叫遞迴函式，並輸出計算結果。
 
-透過遞迴實作 Sigma 計算，程式邏輯簡單且易於理解，特別適合展示遞迴的核心思想。然而，遞迴會因堆疊深度受到限制，當 $n$ 值過大時，應考慮使用迭代版本來避免 Stack Overflow 問題。
+## 程式實作
+```cpp
+#include <iostream>
+
+void insert(Node*& root, int val) {
+    if (!root) {
+        root = new Node(val);
+        return;
+    }
+    if (val < root->val) insert(root->left, val);
+    else insert(root->right, val);
+}
+
+int height(Node* root) {
+    if (!root) return 0;
+    int lh = height(root->left);
+    int rh = height(root->right);
+    return (lh > rh ? lh : rh) + 1;
+}
+void shuffle(int* arr, int n) {
+    for (int i = n - 1; i > 0; --i) {
+        int j = rand() % (i + 1);
+        int tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    }
+}
+
+int main(){
+ double ratio = h / log2(n);
+
+ std::cout << "n = " << n
+     << ", height = " << h
+     << ", log2(n) = " << log2n
+     << ", height/log2(n) = " << ratio << std::endl;
+}
+```
+
+## 效能分析
+
+| 函數/步驟         | 時間複雜度（期望） | 時間複雜度（最壞） | 空間複雜度 | 說明                                                         |
+|-------------------|-------------------|---------------------|------------|--------------------------------------------------------------|
+| shuffle           | O(n)              | O(n)                | O(1)       | 確保插入順序隨機                          |
+| insert            | O(log n)          | O(n)                | O(h)       | 單次插入，h為樹高，隨機插入期望為O(log n)，最壞O(n)         |
+| n次insert         | O(n log n)        | O(n^2)              | O(n)       | n個節點依序插入BST                                           |
+| height            | O(n)              | O(n)                | O(h)       | 遞迴遍歷所有節點計算樹高                                     |
+| freeTree          | O(n)              | O(n)                | O(h)       | 遞迴釋放所有節點記憶體                                       |
+| 總體              | O(n log n)        | O(n^2)              | O(n)       | 主要由插入操作主導，空間由n個節點主導                        |
+1.期望情況下，隨機插入BST的高度約為O(logn)，因此總插入複雜度為O(nlogn)。
+2.最壞情況（極度不平衡時）會退化為O(n^2)。
+3.空間複雜度主要來自於節點儲存，為O(n)。
+4.height 與 freeTree 的遞迴堆疊深度為樹高h，期望O(logn)，最壞O(n)。
+
+## 測試與驗證
+
+每組 n 執行完畢後，輸出：
+
+n
+
+樹高 height
+
+log₂(n)
+
+height/log₂(n) 比值
