@@ -1,4 +1,4 @@
-# 41243252
+ 41243252
 # 41243249 
 作業一
 
@@ -6,7 +6,66 @@
 
 1.Max/Min Heap
 
-要定義一個介面（MinPQ），規定 min priority queue 要有哪些基本操作，再寫一個類別（MinHeap）真正用 heap 結構實現這些操作
+要C++ 抽象類別設計、繼承與 heap 的基本操作，並且讓介面和複雜度都和 max priority queue 一致
+
+### 解題策略
+
+設計一個 MinPQ 抽象類別，定義四個純虛擬函式：IsEmpty(), Top(), Push(), Pop()，用陣列（或 vector）實作 MinHeap，繼承 MinPQ，並完成所有函式。
+
+## 程式實作
+
+以下為主要程式碼：
+
+###minheap
+```cpp
+#include <iostream>
+
+class MinPQ {
+public:
+    virtual ~MinPQ() {}                                 
+    virtual bool IsEmpty() const = 0;                   
+    virtual const T& Top() const = 0;                  
+    virtual void Push(const T&) = 0;                   
+    virtual void Pop() = 0;                           
+};
+void HeapifyUp(int idx) {
+    while (idx > 0) {
+        int parent = (idx - 1) / 2;
+        if (heap[idx] < heap[parent]) {
+            std::swap(heap[idx], heap[parent]);
+            idx = parent;
+        }
+        else break;
+    }
+}
+
+void HeapifyDown(int idx) {
+    int n = heap.size();
+    while (true) {
+        int left = 2 * idx + 1;
+        int right = 2 * idx + 2;
+        int smallest = idx;
+        if (left < n && heap[left] < heap[smallest]) smallest = left;
+        if (right < n && heap[right] < heap[smallest]) smallest = right;
+        if (smallest != idx) {
+            std::swap(heap[idx], heap[smallest]);
+            idx = smallest;
+        }
+        else break;
+    }
+int main() {
+    MinHeap<int> minHeap;
+    minHeap.Push(3);
+    minHeap.Push(1);
+    minHeap.Push(4);
+    minHeap.Push(2);
+
+    while (!minHeap.IsEmpty()) {
+        std::cout << minHeap.Top() << " ";
+        minHeap.Pop();
+    }
+    std::cout << std::endl;
+```
 
 2.二元搜尋樹:
 
@@ -15,7 +74,7 @@
 (b)從 BST 中刪除 key 為 k 的節點
 ### 解題策略
 
-1.Max/Min Heap:
+
 
 設計一個 MinPQ 抽象類別，定義四個純虛擬函式：IsEmpty(), Top(), Push(), Pop()，用陣列（或 vector）實作 MinHeap，繼承 MinPQ，並完成所有函式。
 
@@ -30,28 +89,97 @@
 
 以下為主要程式碼：
 
+###minheap
+```cpp
+#include <iostream>
+
+void HeapifyUp(int idx) {
+    while (idx > 0) {
+        int parent = (idx - 1) / 2;
+        if (heap[idx] < heap[parent]) {
+            std::swap(heap[idx], heap[parent]);
+            idx = parent;
+        }
+        else break;
+    }
+}
+
+void HeapifyDown(int idx) {
+    int n = heap.size();
+    while (true) {
+        int left = 2 * idx + 1;
+        int right = 2 * idx + 2;
+        int smallest = idx;
+        if (left < n && heap[left] < heap[smallest]) smallest = left;
+        if (right < n && heap[right] < heap[smallest]) smallest = right;
+        if (smallest != idx) {
+            std::swap(heap[idx], heap[smallest]);
+            idx = smallest;
+        }
+        else break;
+    }
+int main() {
+    int h = 0;
+int size = n;
+while (size > 0) {
+    size /= 2;
+    ++h;
+}
+double ratio = h / std::log2(n);
+
+std::cout << "n = " << n
+    << ", heap height (log2 n rounded up) = " << h
+    << ", h/log2(n) = " << ratio << std::endl;
+}
+```
+###binarysearchtree(a)
 ```cpp
 #include <iostream>
 using namespace std;
 
-int sigma(int n) {
-    if (n < 0)
-        throw "n < 0";
-    else if (n <= 1)
-        return n;
-    return n + sigma(n - 1);
+int height(Node* root) {
+    if (!root) return 0;
+    int lh = height(root->left);
+    int rh = height(root->right);
+    return (lh > rh ? lh : rh) + 1;
 }
 
+void shuffle(int* arr, int n) {
+    for (int i = n - 1; i > 0; --i) {
+        int j = rand() % (i + 1);
+        int tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    }
 int main() {
-    int result = sigma(3);
-    cout << result << '\n';
+    for (int idx = 0; idx < num_ns; ++idx) {
+    int n = ns[idx];
+    int* vals = new int[n];
+    for (int i = 0; i < n; ++i) vals[i] = i;
+    shuffle(vals, n);
+
+    Node* root = nullptr;
+    for (int i = 0; i < n; ++i) insert(root, vals[i]);
+
+    int h = height(root);
+    double ratio = h / log2(n);
+
+    std::cout << "n = " << n
+        << ", height = " << h
+        << ", height/log2(n) = " << ratio << std::endl;
 }
 ```
 
 ## 效能分析
 
-1. 時間複雜度：程式的時間複雜度為 $O(\log n)$。
-2. 空間複雜度：空間複雜度為 $O(100\times \log n + \pi)$。
+1. 時間複雜度
+| 操作 | 時間複雜度 |說明 |
+|----------|--------------|----------|----------|
+| IsEmpty()   |O(1)     | 判斷容器是否為空，直接檢查陣列或 vector 長度      |
+| Top()  | O(1)     | 取得最小元素，直接回傳根節點（heap）        |
+| Push(x)   | O(logn)     |插入新元素後進行 Heapify Up，最多移動樹高次（log n）       |
+| Pop()  | O(logn)      | 移除最小元素（根），用最後一個元素補上後 Heapify Down，最多移動樹高次      |
+2. 空間複雜度：整體空間複雜度為O(n)，因為所有元素都儲存在一個陣列（vector）中。
 
 ## 測試與驗證
 
