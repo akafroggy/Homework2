@@ -208,6 +208,8 @@ int main(){
 | 3000  | 25     | 11.5507  | 2.16436        |
 | 10000 | 32     | 13.2877  | 2.40824        |
 
+(https://github.com/akafroggy/Homework2/blob/main/homework-template/src/images/7136d516_ejpnng.png)
+
 ### 結論
 -隨機插入 n 個節點後的二元搜尋樹，其高度與 log2n 的比值（height/log₂n）會隨著 n 增大而趨於穩定
 -實驗中，當 n 逐漸變大時，height/log₂(n) 的比值會趨近於理論常數，通常在 2~4.3 之間。這說明隨機插入下 BST 的高度確實為 O(logn)
