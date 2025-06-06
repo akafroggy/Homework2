@@ -67,109 +67,6 @@ int main() {
     std::cout << std::endl;
 ```
 
-2.二元搜尋樹:
-
-(a)從空的二元搜尋樹（BST）開始，插入 n 個隨機值
-
-(b)從 BST 中刪除 key 為 k 的節點
-### 解題策略
-
-
-
-設計一個 MinPQ 抽象類別，定義四個純虛擬函式：IsEmpty(), Top(), Push(), Pop()，用陣列（或 vector）實作 MinHeap，繼承 MinPQ，並完成所有函式。
-
-2.二元搜尋樹:
-
-(a)插入 n 個隨機值，用隨機演算法將數字順序打亂，確保插入順序隨機，計算樹高。
-
-(b)從根節點開始，根據 BST 性質（小於往左，大於往右）遞迴搜尋 key 為 k 的節點
-3. 主程式呼叫遞迴函式，並輸出計算結果。
-
-## 程式實作
-
-以下為主要程式碼：
-
-###minheap
-```cpp
-#include <iostream>
-
-void HeapifyUp(int idx) {
-    while (idx > 0) {
-        int parent = (idx - 1) / 2;
-        if (heap[idx] < heap[parent]) {
-            std::swap(heap[idx], heap[parent]);
-            idx = parent;
-        }
-        else break;
-    }
-}
-
-void HeapifyDown(int idx) {
-    int n = heap.size();
-    while (true) {
-        int left = 2 * idx + 1;
-        int right = 2 * idx + 2;
-        int smallest = idx;
-        if (left < n && heap[left] < heap[smallest]) smallest = left;
-        if (right < n && heap[right] < heap[smallest]) smallest = right;
-        if (smallest != idx) {
-            std::swap(heap[idx], heap[smallest]);
-            idx = smallest;
-        }
-        else break;
-    }
-int main() {
-    int h = 0;
-int size = n;
-while (size > 0) {
-    size /= 2;
-    ++h;
-}
-double ratio = h / std::log2(n);
-
-std::cout << "n = " << n
-    << ", heap height (log2 n rounded up) = " << h
-    << ", h/log2(n) = " << ratio << std::endl;
-}
-```
-###binarysearchtree(a)
-```cpp
-#include <iostream>
-using namespace std;
-
-int height(Node* root) {
-    if (!root) return 0;
-    int lh = height(root->left);
-    int rh = height(root->right);
-    return (lh > rh ? lh : rh) + 1;
-}
-
-void shuffle(int* arr, int n) {
-    for (int i = n - 1; i > 0; --i) {
-        int j = rand() % (i + 1);
-        int tmp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = tmp;
-    }
-int main() {
-    for (int idx = 0; idx < num_ns; ++idx) {
-    int n = ns[idx];
-    int* vals = new int[n];
-    for (int i = 0; i < n; ++i) vals[i] = i;
-    shuffle(vals, n);
-
-    Node* root = nullptr;
-    for (int i = 0; i < n; ++i) insert(root, vals[i]);
-
-    int h = height(root);
-    double ratio = h / log2(n);
-
-    std::cout << "n = " << n
-        << ", height = " << h
-        << ", height/log2(n) = " << ratio << std::endl;
-}
-```
-
 ## 效能分析
 
 1. 時間複雜度
@@ -185,16 +82,22 @@ int main() {
 2. 空間複雜度：整體空間複雜度為O(n)，因為所有元素都儲存在一個陣列（vector）中。
 
 ## 測試與驗證
+插入多個亂序數字（例如 3, 1, 4, 2）。
 
+每次呼叫 Top() 應該得到目前 heap 中的最小值。
+
+依序呼叫 Pop()，印出每次 Top() 結果，應該是由小到大輸出（1 2 3 4）。
+
+測試 IsEmpty()，確保 heap 清空後會回傳 true。
 ### 測試案例
 
-| 測試案例 | 輸入參數 $n$ | 預期輸出 | 實際輸出 |
-|----------|--------------|----------|----------|
-| 測試一   | $n = 0$      | 0        | 0        |
-| 測試二   | $n = 1$      | 1        | 1        |
-| 測試三   | $n = 3$      | 6        | 6        |
-| 測試四   | $n = 5$      | 15       | 15       |
-| 測試五   | $n = -1$     | 異常拋出 | 異常拋出 |
+| 測試編號 | 操作序列                         | 預期 Top() 結果序列 | 預期 IsEmpty() 結果 | 說明                    |
+|----------|----------------------------------|---------------------|---------------------|-------------------------|
+| 1        | Push(3), Push(1), Push(4), Push(2) | 1, 2, 3, 4          | false, ..., true    | 正常插入與遞增取出      |
+| 2        | Push(5), Pop(), Pop()              | 5, (例外)           | false, true         | Pop 到空 heap 應丟例外  |
+| 3        | Push(2), Push(2), Push(1), Pop()   | 1, 2, 2             | false, false, true  | 重複元素處理            |
+| 4        | 無操作                             | (例外)              | true                | 空 heap 呼叫 Top() 應例外|
+
 
 ### 編譯與執行指令
 
@@ -243,5 +146,20 @@ $ ./sigma
 3. **遞迴的語意清楚**  
    在程式中，每次遞迴呼叫都代表一個「子問題的解」，而最終遞迴的返回結果會逐層相加，完成整體問題的求解。  
    這種設計簡化了邏輯，不需要額外變數來維護中間狀態。
+   2.二元搜尋樹:
+
+(a)從空的二元搜尋樹（BST）開始，插入 n 個隨機值
+
+(b)從 BST 中刪除 key 為 k 的節點
+### 解題策略
+
+設計一個 MinPQ 抽象類別，定義四個純虛擬函式：IsEmpty(), Top(), Push(), Pop()，用陣列（或 vector）實作 MinHeap，繼承 MinPQ，並完成所有函式。
+
+2.二元搜尋樹:
+
+(a)插入 n 個隨機值，用隨機演算法將數字順序打亂，確保插入順序隨機，計算樹高。
+
+(b)從根節點開始，根據 BST 性質（小於往左，大於往右）遞迴搜尋 key 為 k 的節點
+3. 主程式呼叫遞迴函式，並輸出計算結果。
 
 透過遞迴實作 Sigma 計算，程式邏輯簡單且易於理解，特別適合展示遞迴的核心思想。然而，遞迴會因堆疊深度受到限制，當 $n$ 值過大時，應考慮使用迭代版本來避免 Stack Overflow 問題。
