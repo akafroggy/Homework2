@@ -395,19 +395,18 @@ int main(){
 
 ## 基本參數設定
 
-- n：總記錄數
+## 參數說明
 
-- S：內存容量（記錄數）
+| 參數       | 意義                                                         |
+|------------|--------------------------------------------------------------|
+| \( n \)    | 總記錄數                                                     |
+| \( S \)    | 記憶體容量（記錄數）                                         |
+| \( m \)    | 初始 runs 數量                                               |
+| \( k \)    | 歸併路數（\( k \leq S - 1 \)）                               |
+| \( t_s \)  | 磁碟尋道時間 (seek time)                                     |
+| \( t_l \)  | 磁碟延遲時間 (latency time)                                  |
+| \( t_t \)  | 每筆記錄傳輸時間 (transmission time per record)              |
 
-- m：初始歸併段數量
-
-- k：歸併路數（k ≤ S-1，因為需要1個輸出緩衝區）
-
-- ts：磁碟尋道時間
-
-- tl：磁碟延遲時間
-
-- tt：每筆記錄傳輸時間
 
 ### 核心分析要點
 
@@ -417,75 +416,6 @@ int main(){
 
 - I/O重疊處理效果
 
-
-
- ## 程式實作
-```cpp
-#include <iostream>
-
-struct Node {
-    int val;
-    Node* left;
-    Node* right;
-    Node(int v) : val(v), left(nullptr), right(nullptr) {}
-};
-
-Node* findMin(Node* node) {
-    while (node && node->left)
-        node = node->left;
-    return node;
-}
-Node* deleteNode(Node* root, int k) {
-    if (!root) return nullptr;
-    if (k < root->val) {
-        root->left = deleteNode(root->left, k);
-    }
-    else if (k > root->val) {
-        root->right = deleteNode(root->right, k);
-    }
-    else {
-        // 找到要刪除的節點
-        if (!root->left && !root->right) {
-            delete root;
-            return nullptr;
-        }
-        else if (!root->left) {
-            Node* temp = root->right;
-            delete root;
-            return temp;
-        }
-        else if (!root->right) {
-            Node* temp = root->left;
-            delete root;
-            return temp;
-        }
-        else {
-            Node* succ = findMin(root->right);
-            root->val = succ->val;
-            root->right = deleteNode(root->right, succ->val);
-        }
-    }
-    return root;
-}
-
-// 中序走訪（印出樹內容）
-void inorder(Node* root) {
-    if (!root) return;
-    inorder(root->left);
-    std::cout << root->val << " ";
-    inorder(root->right);
-}
-
-int main(){
- insert(root, 5);
- insert(root, 3);
- insert(root, 8);
- insert(root, 1);
- insert(root, 4);
- insert(root, 7);
- insert(root, 9);
-}
-```
 
 ## 效能分析
 
@@ -506,15 +436,48 @@ $$
   
   ### 測試案例
 
- - 依序插入 5, 3, 8, 1, 4, 7, 9
- 
-  | 測試項目              | 操作                      | 預期結果                         |
-|-----------------------|---------------------------|----------------------------------|
-| 刪除葉節點            | deleteNode(root, 1)       | BST 性質不變           |
-| 刪除只有左/右子樹節點 | deleteNode(root, 8)       | 8 被移除，7 或 9 正確連接        |
-| 刪除有兩子樹節點      | deleteNode(root, 3)       | 4 或 1 取代 3，BST 性質維持      |
-| 刪除根節點            | deleteNode(root, 5)       | 新根為 7 或 4，BST 正確          |
-| 刪除不存在節點        | deleteNode(root, 42)      | 樹無變化                         |
+已知參數如下：
+
+- \( t_s = 80\,\text{ms} = 0.08\,\text{s} \)
+- \( t_l = 20\,\text{ms} = 0.02\,\text{s} \)
+- \( n = 200{,}000 \)
+- \( m = 64 \)
+- \( t_t = 0.001\,\text{s/record} \)
+- \( S = 2000 \)
+- \( 1 \leq k \leq S-1 = 1999 \)
+
+---
+
+### 公式
+
+$$
+t_{\text{input}} = \lceil \log_k(m) \rceil \cdot \left[ m \cdot (t_s + t_l) + n \cdot t_t \right]
+$$
+
+---
+
+### 代入計算
+
+以 \( k = 4 \) 為例：
+
+- 歸併趟數：\( \lceil \log_4 64 \rceil = 3 \)
+- 每趟輸入時間：\( 64 \times (0.08 + 0.02) + 200{,}000 \times 0.001 = 6.4 + 200 = 206.4\,\text{s} \)
+- 總輸入時間：\( 3 \times 206.4 = 619.2\,\text{s} \)
+
+---
+
+| \( k \) | 歸併趟數 \( \lceil \log_k 64 \rceil \) | 每趟輸入時間 (s) | 總輸入時間 (s) |
+|---------|----------------------------------------|------------------|----------------|
+| 2       | 6                                      | 206.4            | 1238.4         |
+| 4       | 3                                      | 206.4            | 619.2          |
+| 8       | 2                                      | 206.4            | 412.8          |
+| 16      | 2                                      | 206.4            | 412.8          |
+| 32      | 2                                      | 206.4            | 412.8          |
+| 64      | 1                                      | 206.4            | 206.4          |
+
+---
+
+可以依此表格，繪製 \( t_{\text{input}} \) 隨 \( k \) 變化的趨勢圖。
 
 ### 結論
 
