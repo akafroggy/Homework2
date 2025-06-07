@@ -508,8 +508,7 @@ $$
 
 ---
 
-可以依此表格，繪製 \( t_{\text{input}} \) 隨 \( k \) 變化的趨勢圖。
-
+![_關係圖](https://github.com/akafroggy/Homework2/blob/main/homework-template/src/images/b85a7e1a_h7szop.png)
 ### 結論
 
 - 隨著 k 值增加，所需的合併次數（passes）大幅下降，總輸入時間也隨之減少。
