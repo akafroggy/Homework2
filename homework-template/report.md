@@ -514,7 +514,7 @@ $$
 
 ---
 
-![_關係圖](https://github.com/akafroggy/Homework2/blob/main/homework-template/src/images/b85a7e1a_h7szop.jpg)
+![_關係圖](https://github.com/akafroggy/Homework2/raw/main/homework-template/src/images/b85a7e1a_h7szop.jpg)
 
 ### 結論
 
