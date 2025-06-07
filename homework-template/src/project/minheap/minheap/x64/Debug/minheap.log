@@ -1,0 +1,26 @@
+﻿  project.cpp
+E:\大二下\資料結構\minheap\minheap\project.cpp(66,31): warning C4267: '引數': 將 'size_t' 轉換為 'int'，資料可能遺失
+  E:\大二下\資料結構\minheap\minheap\project.cpp(66,31):
+  範本具現化內容 (首先是最舊的) 是
+  	E:\大二下\資料結構\minheap\minheap\project.cpp(79,18):
+  	請參考正在進行編譯的 類別 樣板 具現化 'MinHeap<int>'
+  	E:\大二下\資料結構\minheap\minheap\project.cpp(64,18):
+  	編譯 類別 樣板 成員函式 'void MinHeap<int>::Push(const T &)' 期間
+          with
+          [
+              T=int
+          ]
+  		E:\大二下\資料結構\minheap\minheap\project.cpp(80,17):
+  		請參閱 'main' 中 'MinHeap<int>::Push' 的第一個參考
+  
+E:\大二下\資料結構\minheap\minheap\project.cpp(37,15): warning C4267: '正在初始化': 將 'size_t' 轉換為 'int'，資料可能遺失
+  E:\大二下\資料結構\minheap\minheap\project.cpp(37,15):
+  範本具現化內容 (首先是最舊的) 是
+  	E:\大二下\資料結構\minheap\minheap\project.cpp(36,10):
+  	編譯 類別 樣板 成員函式 'void MinHeap<int>::HeapifyDown(int)' 期間
+  		E:\大二下\資料結構\minheap\minheap\project.cpp(73,39):
+  		請參閱 'MinHeap<int>::Pop' 中 'MinHeap<int>::HeapifyDown' 的第一個參考
+  		E:\大二下\資料結構\minheap\minheap\project.cpp(87,20):
+  		請參閱 'main' 中 'MinHeap<int>::Pop' 的第一個參考
+  
+  minheap.vcxproj -> E:\大二下\資料結構\minheap\x64\Debug\minheap.exe
