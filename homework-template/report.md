@@ -499,9 +499,11 @@ int main(){
 ## 測試與驗證
 
 總輸入時間公式
+
 $$
 t_{\text{input}} = \lceil \log_k(m) \rceil \cdot \left[ m \cdot (t_s + t_l) + n \cdot t_t \right]
 $$
+  
   ### 測試案例
 
  - 依序插入 5, 3, 8, 1, 4, 7, 9
