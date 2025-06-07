@@ -215,7 +215,7 @@ int main(){
 | 3000  | 25     | 11.5507  | 2.16436        |
 | 10000 | 32     | 13.2877  | 2.40824        |
 
-![height/log2n_關係圖](https://github.com/akafroggy/Homework2/blob/main/homework-template/src/images/7136d516_ejpnng.png)
+![height/log2n_關係圖](https://github.com/akafroggy/Homework2/raw/homework-template/src/images/7136d516_ejpnng.png)
 
 ### 結論
 - 隨機插入 n 個節點後的二元搜尋樹，其高度與 log2n 的比值（height/log₂n）會隨著 n 增大而趨於穩定
