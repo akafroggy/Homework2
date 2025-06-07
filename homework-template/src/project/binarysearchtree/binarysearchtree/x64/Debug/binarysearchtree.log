@@ -1,0 +1,3 @@
+﻿  project.cpp
+D:\大二下\資料結構\binarysearchtree\binarysearchtree\project.cpp(53,15): warning C4244: '引數': 將 'time_t' 轉換為 'unsigned int'，由於類型不同，可能導致資料遺失
+  binarysearchtree.vcxproj -> D:\大二下\資料結構\binarysearchtree\x64\Debug\binarysearchtree.exe
