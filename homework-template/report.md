@@ -448,13 +448,6 @@ $$
 
 ---
 
-### 公式
-
-$$
-t_{\text{input}} = \lceil \log_k(m) \rceil \cdot \left[ m \cdot (t_s + t_l) + n \cdot t_t \right]
-$$
-
----
 
 ### 代入計算
 
