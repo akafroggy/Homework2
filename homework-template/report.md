@@ -233,7 +233,7 @@ int main(){
 
 ---
 
-###binarysearch(b)
+### binarysearch(b)
 
 ## 解題說明
 
