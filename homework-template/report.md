@@ -233,7 +233,7 @@ int main(){
 
 ---
 
-### binarysearch(b)
+## binarysearch(b)
 
 ## 解題說明
 
@@ -398,7 +398,7 @@ int main(){
 
 ---
 
-### 第三題
+## 第三題
 
 
 ## 基本參數設定
